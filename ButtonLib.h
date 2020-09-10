@@ -26,7 +26,7 @@ class BUTTON_MANAGER
             ACTIVE_HIGH
         };
         uint8_t noPinDetected;
-        void setupKeyboard(Vector<uint8_t> Pins, uint8_t Modality = ACTIVE_HIGH, uint32_t LongPressTime = 1000);
+        void setupKeyboard(Vector<uint8_t> Pins, uint32_t LongPressTime = 1000, uint8_t Modality = ACTIVE_HIGH);
         bool checkKeys(uint8_t &ButtonPressed, uint8_t &Action);
 };
 

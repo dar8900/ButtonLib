@@ -11,6 +11,7 @@ Vector<uint8_t> Pin;
 
 void setup()
 {
+    Serial.begin(9600);
     Pin.push_back(PIN_1);
     Pin.push_back(PIN_2);
     Pin.push_back(PIN_3);
@@ -20,20 +21,43 @@ void setup()
 
 void loop()
 {
-    uint8_t WichPin = BUTTON_MANAGER::noPinDetected;
+    uint8_t WichPin = Keyboard.noPinDetected;
     uint8_t ButtonAction = BUTTON_MANAGER::NO_PRESS;
     if(Keyboard.checkKeys(WichPin, ButtonAction))
     {
-        switch(WichPin)
+        if(ButtonAction == BUTTON_MANAGER::PRESSED)
         {
-            case PIN_1:
-                break;
-            case PIN_2:
-                break;
-            case PIN_3:
-                break;
-            default:
-                break;
+            switch(WichPin)
+            {
+                case PIN_1:
+                    Serial.println("Premuto il pulsante 1");
+                    break;
+                case PIN_2:
+                    Serial.println("Premuto il pulsante 2");
+                    break;
+                case PIN_3:
+                    Serial.println("Premuto il pulsante 3");
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if(ButtonAction == BUTTON_MANAGER::LONG_PRESSED)
+        {
+            switch(WichPin)
+            {
+                case PIN_1:
+                    Serial.println("Premuto a lungo il pulsante 1");
+                    break;
+                case PIN_2:
+                    Serial.println("Premuto a lungo il pulsante 2");
+                    break;
+                case PIN_3:
+                    Serial.println("Premuto a lungo il pulsante 3");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
