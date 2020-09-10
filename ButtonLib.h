@@ -19,7 +19,7 @@ class BUTTON_MANAGER
             PRESSED = 0,
             LONG_PRESSED,
             NO_PRESS
-        }
+        };
         enum
         {
             ACTIVE_LOW = 0,

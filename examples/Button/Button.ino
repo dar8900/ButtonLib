@@ -6,7 +6,7 @@
 
 BUTTON_MANAGER Keyboard;
 
-vector<uint8_t> Pin;
+Vector<uint8_t> Pin;
 
 
 void setup()
