@@ -1,6 +1,6 @@
 #include "ButtonLib.h"
 
-void BUTTON_MANAGER::setupKeyboard(vector<uint8_t> Pins, uint8_t Modality, uint32_t LongPressTime)
+void BUTTON_MANAGER::setupKeyboard(Vector<uint8_t> Pins, uint8_t Modality, uint32_t LongPressTime)
 {
     pins = Pins;
     nPins = pins.size();

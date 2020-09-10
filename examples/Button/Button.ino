@@ -1,4 +1,4 @@
-#include "../../../ButtonLib.h"
+#include <ButtonLib.h>
 
 #define PIN_1   1
 #define PIN_2   3
