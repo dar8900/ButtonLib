@@ -19,12 +19,16 @@ class BUTTON_MANAGER
 
     private:
         const uint16_t _LONG_PRESS_DELAY_DFLT = 1500; // in ms
+        const uint16_t _ENGINE_CYCLE = 20; // in ms
         int8_t _pin = -1;
         bool _activeLow = false;
         uint16_t _longPressDelay = _LONG_PRESS_DELAY_DFLT;
-        uint32_t _longPressCnt;
+        uint32_t _longPressCnt = 0;
+        uint32_t _engineCnt = 0;
         bool _useEngine = false;
+        bool _longPressed = false;
         button_press_mode _actualStatus = no_press;
+        button_press_mode _oldStatus = no_press;
 };
 
 #endif
