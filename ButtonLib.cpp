@@ -1,66 +1,71 @@
 #include "ButtonLib.h"
 
-void BUTTON_MANAGER::setupKeyboard(Vector<uint8_t> Pins, uint32_t LongPressTime, uint8_t Modality)
+
+BUTTON_MANAGER::BUTTON_MANAGER(int8_t Pin, bool UseEngine, uint16_t LongPressDelay = 0, bool ActiveLow = false)
 {
-    pins = Pins;
-    nPins = pins.size();
-    buttonActivationModality = Modality;
-    noPinDetected = pins.size() + 1;
-    longPressTime = LongPressTime;
-    for(int i = 0; i < pins.size() ; i++)
+    _pin = Pin;
+    if(LongPressDelay != 0)
     {
-        pinMode(pins[i], INPUT);
-        elapsedPressTime.push_back(0);
-        wasLongButtonPress.push_back(false);
+        _longPressDelay = LongPressDelay;
     }
+    _useEngine = UseEngine;
+    _activeLow = ActiveLow;
 }
 
-bool BUTTON_MANAGER::checkKeys(uint8_t &ButtonPressed, uint8_t &Action)
+
+button_press_mode BUTTON_MANAGER::getButtonMode()
 {
-    bool KeyboardPressed = false, LongPress = false;
-    Action = NO_PRESS;
-    ButtonPressed = noPinDetected;
-    uint8_t PinRead = 0;
-    for(int Key = 0; Key < pins.size(); Key++)
+
+}
+
+void BUTTON_MANAGER::buttonEngine()
+{
+    bool Press = false;
+    if(_useEngine)
     {
-        PinRead = digitalRead(pins[Key]);
-        if(PinRead == buttonActivationModality)
+        if(_longPressCnt == 0)
         {
-            ButtonPressed = Key;
-            KeyboardPressed = true;
-            break;
+            _longPressCnt = millis();
         }
-    }
-    if(ButtonPressed != noPinDetected)
-    {
-        elapsedPressTime[ButtonPressed] = millis();
-        while(PinRead == buttonActivationModality)
+        if(_modeButtonEngineTimer.isOver(true))
         {
-            PinRead = digitalRead(pins[ButtonPressed]);
-            if(millis() - elapsedPressTime[ButtonPressed] >= longPressTime)
+            Press = (bool)digitalRead(_pin);
+            if(Press)
             {
-                LongPress = true;
-                break;
-            }
-        }
-        if(LongPress)
-        {
-            Action = LONG_PRESSED;
-            wasLongButtonPress[ButtonPressed] = true;
-        }
-        else
-        {
-            if(!wasLongButtonPress[ButtonPressed])
-            {
-                Action = PRESSED;
+                if(!_longPressTimer.isRunning() && !_longPressed)
+                {
+                    _longPressTimer.start(_longPressDelay);
+                }
+                if(_longPressTimer.isOver() && !_longPressed)
+                {
+                    _longPressed = true;
+                    _actualMode = long_press;
+                    _lastMode =_actualMode;
+                    Debug.logDebug("Pressione prolungata");
+                }
+                else
+                {
+                    _actualMode = no_press;
+                }
             }
             else
             {
-                wasLongButtonPress[ButtonPressed] = false;
+                if(_longPressTimer.isRunning())
+                {
+                    _longPressTimer.stop();
+                    _actualMode = short_press;
+                    _lastMode =_actualMode;
+                    Debug.logDebug("Pressione breve");
+                }
+                else
+                {
+                    _actualMode = no_press;
+                }
             }
-        }   
-        elapsedPressTime[ButtonPressed] = 0;     
-        delay(25);
+        }
     }
-    return KeyboardPressed;
+    else
+    {
+
+    }
 }

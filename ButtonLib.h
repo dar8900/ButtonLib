@@ -1,33 +1,30 @@
 #ifndef BUTTON_LIB_H
 #define BUTTON_LIB_H
 #include <Arduino.h>
-#include <Vector.h>
 #include <stdint.h>
 
 class BUTTON_MANAGER
 {
-    private:
-        uint8_t buttonActivationModality = ACTIVE_HIGH;
-        Vector<uint8_t> pins;
-        uint8_t nPins;
-        Vector<uint32_t>elapsedPressTime;
-        Vector<bool>wasLongButtonPress;
-        uint32_t longPressTime = 1000;
+    typedef enum
+    {
+        short_press = 0,
+        long_press,
+        no_press
+    }button_press_mode;
+
     public:
-        enum
-        {
-            PRESSED = 0,
-            LONG_PRESSED,
-            NO_PRESS
-        };
-        enum
-        {
-            ACTIVE_LOW = 0,
-            ACTIVE_HIGH
-        };
-        uint8_t noPinDetected;
-        void setupKeyboard(Vector<uint8_t> Pins, uint32_t LongPressTime = 1000, uint8_t Modality = ACTIVE_HIGH);
-        bool checkKeys(uint8_t &ButtonPressed, uint8_t &Action);
+        BUTTON_MANAGER(int8_t Pin, bool UseEngine,uint16_t LongPressDelay = 0, bool ActiveLow = false);
+        button_press_mode getButtonMode();
+        void buttonEngine();
+
+    private:
+        const uint16_t _LONG_PRESS_DELAY_DFLT = 1500; // in ms
+        int8_t _pin = -1;
+        bool _activeLow = false;
+        uint16_t _longPressDelay = _LONG_PRESS_DELAY_DFLT;
+        uint32_t _longPressCnt;
+        bool _useEngine = false;
+        button_press_mode _actualStatus = no_press;
 };
 
 #endif
