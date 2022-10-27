@@ -19,7 +19,7 @@ void setup()
 
     for(int i = 0; i < MAX_KEYBOARD_KEYS; i++)
     {
-        Keyboard[i].setup(Pins[i], true, 1500, true);
+        Keyboard[i].setup(Pins[i], 1500, true);
     }
 }
 
