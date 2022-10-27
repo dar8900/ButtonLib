@@ -14,7 +14,7 @@ class BUTTON_MANAGER
         }button_press_mode;
 
         BUTTON_MANAGER();
-        void setup(int8_t Pin, uint16_t LongPressDelay = 0, bool ActiveLow = false)
+        void setup(int8_t Pin, uint16_t LongPressDelay = 0, bool ActiveLow = false);
         button_press_mode getButtonMode();
         void buttonEngine();
 
