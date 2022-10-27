@@ -12,7 +12,6 @@ void BUTTON_MANAGER::setup(int8_t Pin, bool UseEngine, uint16_t LongPressDelay =
     {
         _longPressDelay = LongPressDelay;
     }
-    _useEngine = UseEngine;
     _activeLow = ActiveLow;
 }
 
@@ -30,58 +29,13 @@ button_press_mode BUTTON_MANAGER::getButtonMode()
 void BUTTON_MANAGER::buttonEngine()
 {
     bool Press = false;
-    if(_useEngine)
+    if(_engineCnt == 0)
     {
-        if(_engineCnt == 0)
-        {
-            _engineCnt = millis();
-        }
-        if(millis() - _engineCnt >= __ENGINE_CYCLE)
-        {
-            _engineCnt = 0;
-            Press = (bool)digitalRead(_pin);
-            if(Press)
-            {
-                if(_longPressCnt == 0 && !_longPressed)
-                {
-                    _longPressCnt = millis();
-                }
-                if(millis() - _longPressCnt >= _longPressDelay  && !_longPressed)
-                {
-                    _longPressed = true;
-                    _actualMode = long_press;
-                    _oldStatus =_actualMode;
-                }
-                else
-                {
-                    _actualMode = no_press;
-                }
-            }
-            else
-            {
-                if(_longPressCnt != 0)
-                {
-                    _longPressCnt = 0;
-                    if(_longPressed)
-                    {
-                        _longPressed = false;
-                        _actualStatus = no_press;
-                    }
-                    else
-                    {
-                        _actualMode = short_press;
-                    }
-                    _oldStatus =_actualMode;
-                }
-                else
-                {
-                    _actualMode = no_press;
-                }
-            }
-        }
+        _engineCnt = millis();
     }
-    else
+    if(millis() - _engineCnt >= __ENGINE_CYCLE)
     {
+        _engineCnt = 0;
         Press = (bool)digitalRead(_pin);
         if(Press)
         {
@@ -102,25 +56,18 @@ void BUTTON_MANAGER::buttonEngine()
         }
         else
         {
-            if(_longPressCnt != 0)
+            if(_longPressCnt != 0 && _actualStatus == no_press)
             {
                 _longPressCnt = 0;
-                if(_longPressed)
-                {
-                    _longPressed = false;
-                    _actualStatus = no_press;
-                }
-                else
-                {
-                    _actualMode = short_press;
-                    delay(25);
-                }
+                _actualStatus = no_press;
+                _actualMode = short_press;
                 _oldStatus =_actualMode;
             }
             else
             {
                 _actualMode = no_press;
             }
+            _longPressed = false;
         }
     }
 }
