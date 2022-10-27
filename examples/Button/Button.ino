@@ -4,60 +4,44 @@
 #define PIN_2   3
 #define PIN_3   5
 
-BUTTON_MANAGER Keyboard;
+#define MAX_KEYBOARD_KEYS   3
 
-Vector<uint8_t> Pin;
-
+BUTTON_MANAGER Keyboard[MAX_KEYBOARD_KEYS];
 
 void setup()
 {
     Serial.begin(9600);
-    Pin.push_back(PIN_1);
-    Pin.push_back(PIN_2);
-    Pin.push_back(PIN_3);
+    int8_t Pins[MAX_KEYBOARD_KEYS] = {
+        PIN_1,
+        PIN_2,
+        PIN_3
+    };
 
-    Keyboard.setupKeyboard(Pin);
+    for(int i = 0; i < MAX_KEYBOARD_KEYS; i++)
+    {
+        Keyboard[i].setup(Pins[i], true, 1500, true);
+    }
 }
+
+int i = 0;
 
 void loop()
 {
-    uint8_t WichPin = Keyboard.noPinDetected;
-    uint8_t ButtonAction = BUTTON_MANAGER::NO_PRESS;
-    if(Keyboard.checkKeys(WichPin, ButtonAction))
+    if(Keyboard[i].getButtonMode() == BUTTON_MANAGER::button_press_mode::short_press)
     {
-        if(ButtonAction == BUTTON_MANAGER::PRESSED)
-        {
-            switch(WichPin)
-            {
-                case PIN_1:
-                    Serial.println("Premuto il pulsante 1");
-                    break;
-                case PIN_2:
-                    Serial.println("Premuto il pulsante 2");
-                    break;
-                case PIN_3:
-                    Serial.println("Premuto il pulsante 3");
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if(ButtonAction == BUTTON_MANAGER::LONG_PRESSED)
-        {
-            switch(WichPin)
-            {
-                case PIN_1:
-                    Serial.println("Premuto a lungo il pulsante 1");
-                    break;
-                case PIN_2:
-                    Serial.println("Premuto a lungo il pulsante 2");
-                    break;
-                case PIN_3:
-                    Serial.println("Premuto a lungo il pulsante 3");
-                    break;
-                default:
-                    break;
-            }
-        }
+        Serial.println("Short press of pin " + String(Pins[i]));
+    }
+    else if(Keyboard[i].getButtonMode() == BUTTON_MANAGER::button_press_mode::long_press)
+    {
+        Serial.println("Long press of pin " + String(Pins[i]));
+    }
+    Keyboard[i].buttonEngine();    
+    if(i < MAX_KEYBOARD_KEYS - 1)
+    {
+        i++;
+    }
+    else
+    {
+        i = 0;
     }
 }
