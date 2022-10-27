@@ -33,7 +33,7 @@ void BUTTON_MANAGER::buttonEngine()
     {
         _engineCnt = millis();
     }
-    if(millis() - _engineCnt >= __ENGINE_CYCLE)
+    if(millis() - _engineCnt >= _ENGINE_CYCLE)
     {
         _engineCnt = 0;
         Press = (bool)digitalRead(_pin);
