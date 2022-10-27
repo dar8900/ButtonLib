@@ -1,7 +1,11 @@
 #include "ButtonLib.h"
 
 
-BUTTON_MANAGER::BUTTON_MANAGER(int8_t Pin, bool UseEngine, uint16_t LongPressDelay = 0, bool ActiveLow = false)
+BUTTON_MANAGER::BUTTON_MANAGER()
+{
+}
+
+void BUTTON_MANAGER::setup(int8_t Pin, bool UseEngine, uint16_t LongPressDelay = 0, bool ActiveLow = false)
 {
     _pin = Pin;
     if(LongPressDelay != 0)
@@ -11,7 +15,6 @@ BUTTON_MANAGER::BUTTON_MANAGER(int8_t Pin, bool UseEngine, uint16_t LongPressDel
     _useEngine = UseEngine;
     _activeLow = ActiveLow;
 }
-
 
 button_press_mode BUTTON_MANAGER::getButtonMode()
 {

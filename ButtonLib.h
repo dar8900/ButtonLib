@@ -5,15 +5,16 @@
 
 class BUTTON_MANAGER
 {
-    typedef enum
-    {
-        short_press = 0,
-        long_press,
-        no_press
-    }button_press_mode;
-
     public:
-        BUTTON_MANAGER(int8_t Pin, bool UseEngine,uint16_t LongPressDelay = 0, bool ActiveLow = false);
+        typedef enum
+        {
+            short_press = 0,
+            long_press,
+            no_press
+        }button_press_mode;
+
+        BUTTON_MANAGER();
+        void setup(int8_t Pin, bool UseEngine,uint16_t LongPressDelay = 0, bool ActiveLow = false)
         button_press_mode getButtonMode();
         void buttonEngine();
 
