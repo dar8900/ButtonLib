@@ -5,7 +5,7 @@ BUTTON_MANAGER::BUTTON_MANAGER()
 {
 }
 
-void BUTTON_MANAGER::setup(int8_t Pin, bool UseEngine, uint16_t LongPressDelay = 0, bool ActiveLow = false)
+void BUTTON_MANAGER::setup(int8_t Pin, uint16_t LongPressDelay = 0, bool ActiveLow = false)
 {
     _pin = Pin;
     if(LongPressDelay != 0)
@@ -15,9 +15,9 @@ void BUTTON_MANAGER::setup(int8_t Pin, bool UseEngine, uint16_t LongPressDelay =
     _activeLow = ActiveLow;
 }
 
-button_press_mode BUTTON_MANAGER::getButtonMode()
+BUTTON_MANAGER::button_press_mode BUTTON_MANAGER::getButtonMode()
 {
-    button_press_mode PressRet = no_press;
+    BUTTON_MANAGER::button_press_mode PressRet = no_press;
     if(_oldStatus != no_press)
     {
         PressRet = _oldStatus;
