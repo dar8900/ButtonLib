@@ -46,12 +46,12 @@ void BUTTON_MANAGER::buttonEngine()
             if(millis() - _longPressCnt >= _longPressDelay  && !_longPressed)
             {
                 _longPressed = true;
-                _actualMode = long_press;
-                _oldStatus =_actualMode;
+                _actualStatus = long_press;
+                _oldStatus =_actualStatus;
             }
             else
             {
-                _actualMode = no_press;
+                _actualStatus = no_press;
             }
         }
         else
@@ -60,12 +60,12 @@ void BUTTON_MANAGER::buttonEngine()
             {
                 _longPressCnt = 0;
                 _actualStatus = no_press;
-                _actualMode = short_press;
-                _oldStatus =_actualMode;
+                _actualStatus = short_press;
+                _oldStatus =_actualStatus;
             }
             else
             {
-                _actualMode = no_press;
+                _actualStatus = no_press;
             }
             _longPressed = false;
         }
