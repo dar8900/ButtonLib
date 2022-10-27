@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <stdint.h>
 
-class BUTTON_MANAGER
+class ButtonManager
 {
     public:
         typedef enum
@@ -13,7 +13,7 @@ class BUTTON_MANAGER
             no_press
         }button_press_mode;
 
-        BUTTON_MANAGER();
+        ButtonManager();
         void setup(int8_t Pin, uint16_t LongPressDelay = 0, bool ActiveLow = false);
         button_press_mode getButtonMode();
         void buttonEngine();

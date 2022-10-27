@@ -6,7 +6,7 @@
 
 #define MAX_KEYBOARD_KEYS   3
 
-BUTTON_MANAGER Keyboard[MAX_KEYBOARD_KEYS];
+ButtonManager Keyboard[MAX_KEYBOARD_KEYS];
 
 void setup()
 {
@@ -27,11 +27,11 @@ int i = 0;
 
 void loop()
 {
-    if(Keyboard[i].getButtonMode() == BUTTON_MANAGER::button_press_mode::short_press)
+    if(Keyboard[i].getButtonMode() == ButtonManager::button_press_mode::short_press)
     {
         Serial.println("Short press of pin " + String(Pins[i]));
     }
-    else if(Keyboard[i].getButtonMode() == BUTTON_MANAGER::button_press_mode::long_press)
+    else if(Keyboard[i].getButtonMode() == ButtonManager::button_press_mode::long_press)
     {
         Serial.println("Long press of pin " + String(Pins[i]));
     }
