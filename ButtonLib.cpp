@@ -5,7 +5,7 @@ ButtonManager::ButtonManager()
 {
 }
 
-void ButtonManager::setup(int8_t Pin, uint16_t LongPressDelay = 0, bool ActiveLow = false)
+void ButtonManager::setup(int8_t Pin, uint16_t LongPressDelay, bool ActiveLow)
 {
     _pin = Pin;
     if(LongPressDelay != 0)
