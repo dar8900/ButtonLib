@@ -1,73 +1,46 @@
 #include "ButtonLib.h"
 
+Button::Button(int pin, unsigned long debounceDelay, unsigned long longPressDelay)
+    : _pin(pin), _debounceDelay(debounceDelay), _longPressDelay(longPressDelay),
+      _lastState(HIGH), _currentState(HIGH), _lastDebounceTime(0),
+      _pressStartTime(0), _longPressDetected(false) {}
 
-ButtonManager::ButtonManager()
-{
+void Button::begin() {
+    pinMode(_pin, INPUT_PULLUP);
+    _lastState = digitalRead(_pin);
 }
 
-void ButtonManager::setup(int8_t Pin, uint16_t LongPressDelay, bool ActiveLow)
-{
-    _pin = Pin;
-    if(LongPressDelay != 0)
-    {
-        _longPressDelay = LongPressDelay;
-    }
-    _activeLow = ActiveLow;
-}
+void Button::update() {
+    bool reading = digitalRead(_pin);
 
-ButtonManager::button_press_mode ButtonManager::getButtonMode()
-{
-    ButtonManager::button_press_mode PressRet = no_press;
-    if(_oldStatus != no_press)
-    {
-        PressRet = _oldStatus;
-        _oldStatus = no_press;
+    if (reading != _lastState) {
+        _lastDebounceTime = millis();
     }
-    return PressRet;
-}
 
-void ButtonManager::buttonEngine()
-{
-    bool Press = false;
-    if(_engineCnt == 0)
-    {
-        _engineCnt = millis();
-    }
-    if(millis() - _engineCnt >= _ENGINE_CYCLE)
-    {
-        _engineCnt = 0;
-        Press = (bool)digitalRead(_pin);
-        if(Press)
-        {
-            if(_longPressCnt == 0 && !_longPressed)
-            {
-                _longPressCnt = millis();
-            }
-            if(millis() - _longPressCnt >= _longPressDelay  && !_longPressed)
-            {
-                _longPressed = true;
-                _actualStatus = long_press;
-                _oldStatus =_actualStatus;
-            }
-            else
-            {
-                _actualStatus = no_press;
+    if ((millis() - _lastDebounceTime) > _debounceDelay) {
+        if (reading != _currentState) {
+            _currentState = reading;
+
+            if (_currentState == LOW) {
+                _pressStartTime = millis();
+                _longPressDetected = false;
+            } else {
+                _pressStartTime = 0;
             }
         }
-        else
-        {
-            if(_longPressCnt != 0 && _actualStatus == no_press)
-            {
-                _longPressCnt = 0;
-                _actualStatus = no_press;
-                _actualStatus = short_press;
-                _oldStatus =_actualStatus;
-            }
-            else
-            {
-                _actualStatus = no_press;
-            }
-            _longPressed = false;
-        }
     }
+
+    if (_currentState == LOW && !_longPressDetected && (millis() - _pressStartTime) > _longPressDelay) {
+        _longPressDetected = true;
+    }
+
+    _lastState = reading;
+}
+
+bool Button::isPressed() {
+    return _currentState == LOW;
+}
+
+bool Button::isLongPressed() {
+    return _longPressDetected;
 }
